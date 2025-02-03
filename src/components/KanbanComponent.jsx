@@ -61,7 +61,7 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
                 {filteredCards.map((c) => {
                     return <Card key={c.id} {...c} />
                 })}
-                <DropIndicator beforeId="-1" column={column}/>
+                <DropIndicator beforeId="-1" column={column} />
             </div>
         </div>
     )
@@ -70,7 +70,7 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
 const Card = ({ title, id, column }) => {
     return (
         <>
-            <DropIndicator beforeId={id} column={column}/>
+            <DropIndicator beforeId={id} column={column} />
             <div
                 draggable="true"
                 className='cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing'>
@@ -82,12 +82,12 @@ const Card = ({ title, id, column }) => {
     )
 }
 
-const DropIndicator = ({beforeId, column}) => {
+const DropIndicator = ({ beforeId, column }) => {
     return (
-        <div 
-        data-before={beforeId || '-1'}
-        data-column={column}
-        className='my-0.5 h-0.5 w-full bg-violet-400 opacity-0'
+        <div
+            data-before={beforeId || '-1'}
+            data-column={column}
+            className='my-0.5 h-0.5 w-full bg-violet-400 opacity-0'
         />
     )
 }

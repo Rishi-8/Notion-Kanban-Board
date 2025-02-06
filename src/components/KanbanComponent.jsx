@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { FaFire } from 'react-icons/fa'
+import { FiPlus, FiTrash } from 'react-icons/fi'
 
 export const KanbanComponent = () => {
     return <div className='h-screen w-full
@@ -39,6 +41,7 @@ const Board = () => {
                 cards={cards}
                 setCards={setCards}
             />
+            <BurnBarrel setCards={setCards}/>
         </div>
     )
 }
@@ -62,6 +65,7 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
                     return <Card key={c.id} {...c} />
                 })}
                 <DropIndicator beforeId="-1" column={column} />
+                <AddCard column={column} setCards={setCards}/>
             </div>
         </div>
     )
@@ -90,6 +94,77 @@ const DropIndicator = ({ beforeId, column }) => {
             className='my-0.5 h-0.5 w-full bg-violet-400 opacity-0'
         />
     )
+}
+
+const BurnBarrel = ({setCards}) => {
+    const [active, setActive] = useState(false)
+
+    return <div className={`mt-10 grid h-56 w-56 shrink-0 place-content-center rounded-border text-3xl
+        ${active ? "border-red-800 bg-red-800/20 text-red-500" : 
+            "border-neutral-500 bg-neutral-500/20 text-neutral-500"
+        }`}>
+            {active ? <FaFire className='animate-bounce'/>
+            : <FiTrash/>}
+        </div>
+}
+
+const AddCard = ({column, setCards}) => {
+    const [text, setText] = useState("")
+    const [adding, setAdding] = useState(false)
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        if(!text.trim().length) return
+
+        const newCard = {
+            column,
+            title: text.trim(),
+            id: Math.random().toString()
+        }
+
+        setCards((pv) => [...pv, newCard])
+
+        setAdding(false)
+    }
+
+    return <>
+        {adding ? (
+            <form onSubmit={handleSubmit}>
+                <textarea
+                    onChange={(e)=>setText(e.target.value)}
+                    autoFocus
+                    placeholder='Add new Task...'
+                    className='w-full rounded border border-violet-400 bg-violet-400/20
+                    p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0'
+                />
+                <div className="mt-1.5 flex items-center justify-end gap-1.5">
+                    <button 
+                        onClick={()=>setAdding(false)}
+                        className="px-3 py-1.5 text-xs text-neutral-400 transition-colors
+                        hover:text-neutral-50"
+                    >
+                        Close
+                    </button>
+                    <button 
+                        className="flex items-center gap-1.5 rounded bg-neutral-50 px-3
+                        py-1.5 text-xs text-neutral-950 transition-colors hover:bg-neutral-300"
+                    >
+                        <span>Add</span>
+                        <FiPlus/>
+                    </button>
+                </div>
+            </form>
+        ) : <button
+            onClick={()=>setAdding(true)}
+            className='flex w-full items-center gap-1.5 px-3 py-1.5 text-xs
+            text-neutral-400 transition-colors hover:text-neutral-50'
+        >
+            <span>Add Card</span>
+            <FiPlus/>
+        </button>
+        }
+    </>
 }
 
 const DEFAULT_CARDS = [
